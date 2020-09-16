@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Welcome to Book Manager</title>
+    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <style>
+        a {
+            color:black;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <div style="width: 1000px; margin: auto">
+        <ul class="nav nav-tabs" style="margin-bottom: 40px">
+            <li ><a href="/">Home</a></li>
+
+            <li class="navbar-right" th:if="${session.user == null}"><a href="/login">登录</a></li>
+            <li class="navbar-right" th:if="${session.user != null}"><a href="/logout">退出登录</a></li>
+            <li class="navbar-right" th:if="${session.user != null}"><h2 th:text="'欢迎 ' + ${session.user.username}"></h2></li>
+        </ul>
+
+        <div class="text-right" th:if="${session.user != null}">
+            <button type="button" class="btn btn-info"><a href="/edit">添加图书</a></button>
+        </div>
+
+        <table class="table table-bordered">
+            <caption class="text-center">图书信息</caption>
+            <thead>
+            <tr>
+                <th>名称</th>
+                <th>出版社</th>
+                <th>价格</th>
+                <th>简介</th>
+                <th th:if="${session.user != null}">操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="book : ${books}">
+                <td th:text="${book.name}"></td>
+                <td th:text="${book.publisher}"></td>
+                <td th:text="${book.price}"></td>
+                <td th:text="${book.introduction}"></td>
+                <td th:if="${session.user != null}">
+                    <button type="button" class="btn btn-warning"><a th:href="@{'/edit?id='+${book.id}}" href="">修改</a></button>
+                    <button type="button" class="btn btn-danger"><a th:href="@{'/delete?id='+${book.id}}" href="">删除</a></button>
+                </td>
+            </tr>
+            </tbody>
+    </div>
+</table>
+
+</body>
+</html>
